@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Result Calculator</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            padding: 30px;
+        }
+
+        .container {
+            width: 350px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #aaa;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        input {
+            width: 95%;
+            padding: 10px;
+            margin: 7px 0 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            line-height: 1.8;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Student Result Calculator</h2>
+
+    <label>Student Name:</label>
+    <input type="text" id="name" placeholder="Enter student name">
+
+    <label>Subject 1:</label>
+    <input type="number" id="m1" placeholder="Enter marks">
+
+    <label>Subject 2:</label>
+    <input type="number" id="m2" placeholder="Enter marks">
+
+    <label>Subject 3:</label>
+    <input type="number" id="m3" placeholder="Enter marks">
+
+    <label>Subject 4:</label>
+    <input type="number" id="m4" placeholder="Enter marks">
+
+    <label>Subject 5:</label>
+    <input type="number" id="m5" placeholder="Enter marks">
+
+    <button onclick="generateResult()">
+        Calculate Result
+    </button>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+
+function calculateMarks(marks) {
+    let total = 0;
+
+    for (let i = 0; i < marks.length; i++) {
+        total += marks[i];
+    }
+
+    return total;
+}
+
+
+function calculatePercentage(total) {
+    return (total / 500) * 100;
+}
+
+
+function calculateGrade(percentage) {
+
+    if (percentage >= 90) {
+        return "A+";
+    }
+    else if (percentage >= 80) {
+        return "A";
+    }
+    else if (percentage >= 70) {
+        return "B";
+    }
+    else if (percentage >= 60) {
+        return "C";
+    }
+    else if (percentage >= 40) {
+        return "D";
+    }
+    else {
+        return "F";
+    }
+}
+
+
+function generateResult() {
+
+    let name = document.getElementById("name").value;
+
+    let marks = [
+        Number(document.getElementById("m1").value),
+        Number(document.getElementById("m2").value),
+        Number(document.getElementById("m3").value),
+        Number(document.getElementById("m4").value),
+        Number(document.getElementById("m5").value)
+    ];
+
+    if (name.trim() === "" ||
+        marks.some(m => !Number.isFinite(m) || m < 0 || m > 100)) {
+
+        document.getElementById("result").innerHTML =
+            "Please enter a student name and valid marks (0-100).";
+        return;
+    }
+
+    let total = calculateMarks(marks);
+
+    let percentage = calculatePercentage(total);
+
+    let grade = calculateGrade(percentage);
+
+    let result = marks.every(m => m >= 33)
+        ? "PASS"
+        : "FAIL";
+
+    document.getElementById("result").innerHTML = `
+        <hr>
+        Student Name: ${name}<br>
+        Total Marks: ${total} / 500<br>
+        Percentage: ${percentage.toFixed(2)}%<br>
+        Grade: ${grade}<br>
+        Final Result: ${result}
+    `;
+}
+
+</script>
+
+</body>
+</html>
