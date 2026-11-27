@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Analyzer</title>
+</head>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            max-width: 500px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        textarea {
+            width: 90%;
+            height: 120px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: blue;
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+        }
+
+        .result {
+            margin-top: 20px;
+            text-align: left;
+            line-height: 2;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>Text Analyzer</h2>
+
+        <textarea id="text"
+        placeholder="Enter your text here..."></textarea>
+
+        <br>
+
+        <button onclick="analyzeText()">Analyze Text</button>
+
+        <div class="result">
+
+            <h3>Analysis Result</h3>
+
+            <p>Characters: <span id="characters">0</span></p>
+
+            <p>Words: <span id="words">0</span></p>
+
+            <p>Vowels: <span id="vowels">0</span></p>
+
+            <p>Consonants: <span id="consonants">0</span></p>
+
+            <p>Sentences: <span id="sentences">0</span></p>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        function analyzeText() {
+
+            let text = document.getElementById("text").value;
+
+            // Count characters
+            let characters = text.length;
+
+            // Count words
+            let words = text.trim() === ""
+                ? 0
+                : text.trim().split(/\s+/).length;
+
+            // Count vowels
+            let vowels = 0;
+
+            for (let char of text.toLowerCase()) {
+
+                if ("aeiou".includes(char)) {
+                    vowels++;
+                }
+
+            }
+
+            // Count consonants
+            let consonants = 0;
+
+            for (let char of text.toLowerCase()) {
+
+                if (
+                    char >= "a" &&
+                    char <= "z" &&
+                    !"aeiou".includes(char)
+                ) {
+                    consonants++;
+                }
+
+            }
+
+            // Count sentences
+            let sentences = text.match(/[.!?]+/g);
+
+            let sentenceCount = sentences
+                ? sentences.length
+                : 0;
+
+            // Display results
+            document.getElementById("characters").innerText = characters;
+
+            document.getElementById("words").innerText = words;
+
+            document.getElementById("vowels").innerText = vowels;
+
+            document.getElementById("consonants").innerText = consonants;
+
+            document.getElementById("sentences").innerText = sentenceCount;
+
+        }
+
+    </script>
+
+</body>
+</html>
