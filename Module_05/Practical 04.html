@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h2>Menu Driven Program</h2>
+
+    <button onclick="multiplication()">1. Multiplication Table</button>
+    <br><br>
+
+    <button onclick="factorial()">2. Factorial</button>
+    <br><br>
+
+    <button onclick="prime()">3. Prime Number Checking</button>
+    <br><br>
+
+    <button onclick="fibonacci()">4. Fibonacci Series</button>
+    <br><br>
+
+    <button onclick="exitProgram()">5. Exit</button>
+
+    <h3 id="result"></h3>
+
+    <script>
+        let running = true;
+
+        function multiplication() {
+            let n = Number(prompt("Enter a number:"));
+            let output = "Multiplication Table of " + n + "<br>";
+
+            for (let i = 1; i <= 10; i++) {
+                output += n + " x " + i + " = " + (n * i) + "<br>";
+            }
+
+            document.getElementById("result").innerHTML = output;
+        }
+
+        function factorial() {
+            let n = Number(prompt("Enter a number:"));
+            let fact = 1;
+
+            for (let i = 1; i <= n; i++) {
+                fact *= i;
+            }
+
+            document.getElementById("result").innerHTML =
+                "Factorial of " + n + " = " + fact;
+        }
+
+        function prime() {
+            let n = Number(prompt("Enter a number:"));
+            let isPrime = true;
+
+            if (n <= 1 || !Number.isInteger(n)) {
+                isPrime = false;
+            } else {
+                for (let i = 2; i <= Math.sqrt(n); i++) {
+                    if (n % i === 0) {
+                        isPrime = false;
+                        break;
+                    }
+                }
+            }
+
+            document.getElementById("result").innerHTML =
+                n + (isPrime ? " is a Prime Number" :
+                " is not a Prime Number");
+        }
+
+        function fibonacci() {
+            let n = Number(prompt("Enter number of terms:"));
+            let a = 0, b = 1;
+            let output = "Fibonacci Series:<br>";
+
+            for (let i = 1; i <= n; i++) {
+                output += a + " ";
+                let c = a + b;
+                a = b;
+                b = c;
+            }
+
+            document.getElementById("result").innerHTML = output;
+        }
+
+        function exitProgram() {
+            document.getElementById("result").innerHTML =
+                "Thank you! Program Exited.";
+        }
+    </script>
+
+</body>
+</html>
