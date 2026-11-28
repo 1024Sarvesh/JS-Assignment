@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Management System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            padding: 20px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: darkblue;
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px;
+            width: 90%;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .add {
+            background: green;
+        }
+
+        .update {
+            background: blue;
+        }
+
+        .delete {
+            background: red;
+        }
+
+        .search {
+            background: orange;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid gray;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: darkblue;
+            color: white;
+        }
+
+        #total {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Product Management System</h1>
+
+    <h3>Enter Product Details</h3>
+
+    <input type="number" id="id" placeholder="Product ID">
+
+    <input type="text" id="name" placeholder="Product Name">
+
+    <input type="number" id="price" placeholder="Product Price">
+
+    <input type="number" id="quantity" placeholder="Product Quantity">
+
+    <br>
+
+    <button class="add" onclick="addProduct()">Add Product</button>
+
+    <button class="update" onclick="updateProduct()">Update Product</button>
+
+    <hr>
+
+    <h3>Search Product</h3>
+
+    <input type="number" id="searchId" placeholder="Enter Product ID">
+
+    <button class="search" onclick="searchProduct()">Search</button>
+
+    <button onclick="displayProducts()" style="background:gray">
+        Show All
+    </button>
+
+    <h3>Product Details</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="productTable"></tbody>
+    </table>
+
+    <p id="total"></p>
+
+</div>
+
+<script>
+
+
+let products = [
+    {id: 1, name: "Laptop", price: 50000, quantity: 5},
+    {id: 2, name: "Mobile", price: 20000, quantity: 10},
+    {id: 3, name: "Keyboard", price: 1000, quantity: 15}
+];
+
+
+
+function addProduct() {
+
+    let id = Number(document.getElementById("id").value);
+    let name = document.getElementById("name").value;
+    let price = Number(document.getElementById("price").value);
+    let quantity = Number(document.getElementById("quantity").value);
+
+    if (!id || !name.trim() || price <= 0 || quantity <= 0) {
+        alert("Please enter valid product details!");
+        return;
+    }
+
+    let existing = products.find(p => p.id === id);
+
+    if (existing) {
+        alert("Product ID already exists!");
+        return;
+    }
+
+    let product = {
+        id: id,
+        name: name,
+        price: price,
+        quantity: quantity
+    };
+
+    products.push(product);
+
+    alert("Product Added Successfully!");
+
+    clearInputs();
+    displayProducts();
+}
+
+
+
+function displayProducts() {
+
+    let table = document.getElementById("productTable");
+
+    table.innerHTML = "";
+
+    products.forEach(product => {
+
+        table.innerHTML += `
+            <tr>
+                <td>${product.id}</td>
+                <td>${product.name}</td>
+                <td>₹${product.price}</td>
+                <td>${product.quantity}</td>
+
+                <td>
+                    <button class="delete"
+                    onclick="deleteProduct(${product.id})">
+                    Delete
+                    </button>
+                </td>
+            </tr>
+        `;
+
+    });
+
+    calculateTotal();
+}
+
+
+
+function searchProduct() {
+
+    let id = Number(document.getElementById("searchId").value);
+
+    let product = products.find(p => p.id === id);
+
+    if (product) {
+
+        alert(
+            "ID: " + product.id +
+            "\nName: " + product.name +
+            "\nPrice: " + product.price +
+            "\nQuantity: " + product.quantity
+        );
+
+    } else {
+
+        alert("Product Not Found!");
+
+    }
+}
+
+
+
+function updateProduct() {
+
+    let id = Number(document.getElementById("id").value);
+
+    let product = products.find(p => p.id === id);
+
+    if (product) {
+
+        product.name = document.getElementById("name").value;
+        product.price = Number(document.getElementById("price").value);
+        product.quantity = Number(document.getElementById("quantity").value);
+
+        if (!product.name.trim() ||
+            product.price <= 0 ||
+            product.quantity <= 0) {
+            alert("Please enter valid product details!");
+            return;
+        }
+
+        alert("Product Updated Successfully!");
+
+        clearInputs();
+        displayProducts();
+
+    } else {
+
+        alert("Product Not Found!");
+
+    }
+}
+
+
+
+function deleteProduct(id) {
+
+    let confirmDelete = confirm("Are you sure you want to delete?");
+
+    if (confirmDelete) {
+
+        products = products.filter(p => p.id !== id);
+
+        alert("Product Deleted Successfully!");
+
+        displayProducts();
+
+    }
+}
+
+
+
+function calculateTotal() {
+
+    let total = products.reduce((sum, p) => {
+        return sum + (p.price * p.quantity);
+    }, 0);
+
+    document.getElementById("total").innerHTML =
+        "Total Product Value: ₹" + total;
+}
+
+
+
+function clearInputs() {
+
+    document.getElementById("id").value = "";
+    document.getElementById("name").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("quantity").value = "";
+
+}
+
+
+
+displayProducts();
+
+</script>
+
+</body>
+</html>
