@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Marks Management</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        input {
+            width: 95%;
+            padding: 10px;
+            margin: 8px 0;
+        }
+
+        button {
+            padding: 10px 15px;
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        .delete {
+            background: red;
+        }
+
+        .student {
+            background: #eee;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .result {
+            background: #e6f2ff;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Student Marks Management System</h2>
+
+    <h3>Add Student</h3>
+
+    <input type="text" id="name" placeholder="Enter Student Name">
+
+    <input type="number" id="marks"
+        placeholder="Enter Marks (0-100)"
+        min="0" max="100">
+
+    <button onclick="addStudent()">Add Student</button>
+
+    <hr>
+
+    <h3>Student Records</h3>
+
+    <div id="studentList"></div>
+
+    <button onclick="calculateResults()">
+        Calculate Results
+    </button>
+
+    <div class="result">
+
+        <h3>Result Summary</h3>
+
+        <p>Total Marks: <span id="total">0</span></p>
+
+        <p>Average Marks: <span id="average">0</span></p>
+
+        <p>Highest Marks: <span id="highest">0</span></p>
+
+        <p>Lowest Marks: <span id="lowest">0</span></p>
+
+    </div>
+
+</div>
+
+<script>
+
+// Create student array
+let students = [];
+
+// Add Student
+function addStudent() {
+
+    let name = document.getElementById("name").value.trim();
+
+    let marks = Number(document.getElementById("marks").value);
+
+    if (name === "" || document.getElementById("marks").value === ""
+        || !Number.isFinite(marks) || marks < 0 || marks > 100) {
+
+        alert("Please enter a valid name and marks between 0 and 100");
+        return;
+    }
+
+    // Add student object into array
+    students.push({
+        name: name,
+        marks: marks
+    });
+
+    displayStudents();
+
+    document.getElementById("name").value = "";
+    document.getElementById("marks").value = "";
+
+}
+
+// Display Students
+function displayStudents() {
+
+    let output = "";
+
+    students.forEach((student, index) => {
+
+        output += `
+            <div class="student">
+
+                <h4>${student.name}</h4>
+
+                <p>Marks: ${student.marks}</p>
+
+                <button class="delete"
+                    onclick="removeStudent(${index})">
+                    Remove
+                </button>
+
+            </div>
+        `;
+
+    });
+
+    document.getElementById("studentList").innerHTML = output;
+
+}
+
+// Remove Student
+function removeStudent(index) {
+
+    students.splice(index, 1);
+
+    displayStudents();
+
+    calculateResults();
+
+}
+
+// Calculate Results
+function calculateResults() {
+
+    if (students.length === 0) {
+
+        alert("No student records available");
+
+        document.getElementById("total").innerText = 0;
+        document.getElementById("average").innerText = 0;
+        document.getElementById("highest").innerText = 0;
+        document.getElementById("lowest").innerText = 0;
+
+        return;
+    }
+
+    let total = 0;
+
+    let highest = students[0].marks;
+
+    let lowest = students[0].marks;
+
+    students.forEach(student => {
+
+        total += student.marks;
+
+        if (student.marks > highest) {
+            highest = student.marks;
+        }
+
+        if (student.marks < lowest) {
+            lowest = student.marks;
+        }
+
+    });
+
+    let average = total / students.length;
+
+    // Display Results
+    document.getElementById("total").innerText = total;
+
+    document.getElementById("average").innerText =
+        average.toFixed(2);
+
+    document.getElementById("highest").innerText = highest;
+
+    document.getElementById("lowest").innerText = lowest;
+
+}
+
+</script>
+
+</body>
+</html>
